@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/l3akage/sfp/cmd"
+	"github.com/bastianplettner/sfp/cmd"
 )
 
 func main() {

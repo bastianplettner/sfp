@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	sfp "github.com/l3akage/sfp/libsfp"
+	sfp "github.com/bastianplettner/sfp/libsfp"
 	"github.com/spf13/cobra"
 )
 
