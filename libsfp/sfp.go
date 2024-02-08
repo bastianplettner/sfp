@@ -49,7 +49,7 @@ func (d *Device) Write(address byte, data []byte) error {
 	if err != nil {
 		return err
 	}
-	time.Sleep(10 * time.Millisecond)
+	//time.Sleep(10 * time.Millisecond)
 	return nil
 }
 
@@ -178,7 +178,7 @@ func (d *Device) WriteDDM(address byte, data []byte) error {
 	if err != nil {
 		return err
 	}
-	time.Sleep(10 * time.Millisecond)
+	//time.Sleep(10 * time.Millisecond)
 	return nil
 }
 
