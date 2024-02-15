@@ -4,6 +4,8 @@ import (
 	"encoding/binary"
 	"fmt"
 	"log"
+	"bufio"
+	"os"
 
 	sfp "github.com/bastianplettner/sfp/libsfp"
 	"github.com/spf13/cobra"
@@ -49,20 +51,41 @@ func crackPassword() {
 
 	current := make([]byte, 4)
 	loop := startWith
-	for {
-		if loop > 4294967295 {
-			break
+
+	if !bruteForce{
+		for {
+			if loop > 4294967295 {
+				break
+			}
+			binary.LittleEndian.PutUint32(current, uint32(loop))
+			for i := len(current); i < 5; i++ {
+				current = append(current, 0x00)
+			}
+			fmt.Printf("Testing 0x%x 0x%x 0x%x 0x%x Percent %f\n", current[0], current[1], current[2], current[3], float32(loop)/4294967295.0*100.0)
+			device.SetPassword(current)
+			if !device.IsProtected() {
+				break
+			}
+			loop++
 		}
-		binary.LittleEndian.PutUint32(current, uint32(loop))
-		for i := len(current); i < 5; i++ {
-			current = append(current, 0x00)
+		fmt.Printf("Password is 0x%x 0x%x 0x%x 0x%x\n", current[0], current[1], current[2], current[3])
+	} else {
+		wordlist, err := os.Open(file)
+		if err != nil {
+			log.Fatal(err)
 		}
-		fmt.Printf("Testing 0x%x 0x%x 0x%x 0x%x Percent %f\n", current[0], current[1], current[2], current[3], float32(loop)/4294967295.0*100.0)
-		device.SetPassword(current)
-		if !device.IsProtected() {
-			break
+		defer file.Close()
+
+		scanner := bufio.NewScanner(wordlist)
+		for scanner.Scan(){
+			current = binary.LittleEndian.Uint32(scanner.Text())
+			fmt.Printf("Testing 0x%x 0x%x 0x%x 0x%x Percent %f\n", current[0], current[1], current[2], current[3], float32(loop)/14776336.0*100.0)
+			device.SetPassword(current)
+			if !device.IsProtected() {
+				break
+			}
+			loop++
 		}
-		loop++
+		fmt.Printf("Password is 0x%x 0x%x 0x%x 0x%x\n", current[0], current[1], current[2], current[3])
 	}
-	fmt.Printf("Password is 0x%x 0x%x 0x%x 0x%x\n", current[0], current[1], current[2], current[3])
 }
