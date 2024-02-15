@@ -2,7 +2,6 @@ package sfp
 
 import (
 	"math"
-	//"time"
 
 	"golang.org/x/exp/io/i2c"
 )
