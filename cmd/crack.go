@@ -6,6 +6,7 @@ import (
 	"log"
 	"bufio"
 	"os"
+	"strconv"
 
 	sfp "github.com/bastianplettner/sfp/libsfp"
 	"github.com/spf13/cobra"
