@@ -74,11 +74,11 @@ func crackPassword() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		defer file.Close()
+		defer wordlist.Close()
 
 		scanner := bufio.NewScanner(wordlist)
 		for scanner.Scan(){
-			current = binary.LittleEndian.Uint32(scanner.Text())
+			current = binary.LittleEndian.String(scanner.Text())
 			fmt.Printf("Testing 0x%x 0x%x 0x%x 0x%x Percent %f\n", current[0], current[1], current[2], current[3], float32(loop)/14776336.0*100.0)
 			device.SetPassword(current)
 			if !device.IsProtected() {
